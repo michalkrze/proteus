@@ -1,0 +1,23 @@
+# Local development database only. The app runs on the host via `uv run`.
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-proteus}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-proteus}
+      POSTGRES_DB: ${POSTGRES_DB:-proteus}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # PG18 image keeps data in a versioned subdirectory (/var/lib/postgresql/18/docker),
+      # so the volume is mounted one level up, not at /var/lib/postgresql/data.
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      # TCP, not the socket: the temporary server during first init listens only on the socket.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+volumes:
+  pgdata:
