@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / not started. Next action: repo setup (boilerplate by Claude), then first model.
+M1 / setup done (uv + ruff/mypy/pytest, docker-compose PG18, CI green). Next action: owner adds DB dependencies, then `users` model in TDD.
 
 Update this line after every finished task.
 
