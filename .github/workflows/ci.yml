@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v10
+      # setup-uv publishes only exact version tags, no moving major tag like v10.
+      - uses: astral-sh/setup-uv@v10.2.0
 
       # --locked: fail if uv.lock is out of date with pyproject.toml.
       - run: uv sync --locked
