@@ -45,7 +45,7 @@ Policy: newest stable versions. Downgrade only on a proven library blocker.
 
 - Python 3.14, `uv`, ruff, mypy (strict), pytest
 - PostgreSQL 18 (Docker, only the database; the app runs via `uv run`)
-- SQLAlchemy 2.0 (sync sessions), Alembic, psycopg 3
+- SQLAlchemy 2.1 (sync sessions), Alembic, psycopg 3
 - FastAPI, Pydantic v2
 - LangGraph + `langgraph-checkpoint-postgres`, LLM via `init_chat_model` (provider-agnostic; free tiers for now)
 - STT: Groq Whisper. TTS: Fish Audio (free tier ends 2026-11-30, decide in M3)
