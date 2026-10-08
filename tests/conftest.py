@@ -23,6 +23,6 @@ def session(engine: Engine) -> Iterator[Session]:
         transaction = connection.begin()
         with Session(bind=connection, join_transaction_mode="create_savepoint") as session:
             yield session
-            
+
         transaction.rollback()
         transaction.close()
