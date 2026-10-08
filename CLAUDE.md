@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / `User` model + test infra (testcontainers PG18, rollback per test) done, CI green. Next action: owner writes a duplicate-email test (`pytest.raises`), then `traits` model in TDD.
+M1 / `User` model done (2 tests: DB defaults, unique email) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: `Trait` model in TDD (owner decides the first test).
 
 Update this line after every finished task.
 
