@@ -25,4 +25,3 @@ def session(engine: Engine) -> Iterator[Session]:
             yield session
 
         transaction.rollback()
-        transaction.close()

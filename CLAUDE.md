@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / setup done (uv + ruff/mypy/pytest, docker-compose PG18, CI green). Next action: owner adds DB dependencies, then `users` model in TDD.
+M1 / `User` model + test infra (testcontainers PG18, rollback per test) done, CI green. Next action: owner writes a duplicate-email test (`pytest.raises`), then `traits` model in TDD.
 
 Update this line after every finished task.
 
