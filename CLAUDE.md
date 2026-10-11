@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / `User` + `Trait` models done (tests: DB defaults, unique email, `kind` CHECK) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: `Robot` model in TDD (owner decides the first test).
+M1 / `User`, `Trait`, `Robot` models done (tests: DB defaults, unique email, `kind` CHECK, both robot FKs) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: `RobotTrait` association model in TDD (owner decides the first test), then Alembic.
 
 Update this line after every finished task.
 
