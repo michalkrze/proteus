@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from proteus.models import Trait
 
 
-@pytest.mark.parametrize("kind_value", ["other", "", "BASE"])
+@pytest.mark.parametrize("kind_value", ["", "BASE", "other"])
 def test_invalid_kind_is_rejected(session: Session, kind_value: str) -> None:
     trait = Trait(
         slug="test_slug",

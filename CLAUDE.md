@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / `User` model done (2 tests: DB defaults, unique email) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: `Trait` model in TDD (owner decides the first test).
+M1 / `User` + `Trait` models done (tests: DB defaults, unique email, `kind` CHECK) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: `Robot` model in TDD (owner decides the first test).
 
 Update this line after every finished task.
 
