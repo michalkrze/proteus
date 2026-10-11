@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, DateTime, MetaData, func
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, MetaData, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -37,6 +37,21 @@ class Trait(Base):
     kind: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class Robot(Base):
+    __tablename__ = "robots"
+
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=func.uuidv7())
+    name: Mapped[str]
+
+    owner_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"))
+    base_trait_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("traits.id"))
+
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
