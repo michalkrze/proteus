@@ -38,6 +38,19 @@ def test_same_trait_cannot_be_added_twice_to_robot(session: Session) -> None:
         session.flush()
 
 
+def test_in_use_trait_cannot_be_deleted(session: Session) -> None:
+    robot = create_robot(session)
+    trait_addon = create_trait_addon(session)
+
+    robot_trait = RobotTrait(robot_id=robot.id, trait_id=trait_addon.id)
+    session.add(robot_trait)
+    session.flush()
+
+    session.delete(trait_addon)
+    with pytest.raises(IntegrityError, match="fk_robot_traits_trait_id_traits"):
+        session.flush()
+
+
 def create_robot(session: Session) -> Robot:
     trait = Trait(
         slug="test_slug",
