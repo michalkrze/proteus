@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / `User`, `Trait`, `Robot` models done (tests: DB defaults, unique email, `kind` CHECK, both robot FKs) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: `RobotTrait` association model in TDD (owner decides the first test), then Alembic.
+M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: refactor test setup helpers into pytest fixtures, then Alembic.
 
 Update this line after every finished task.
 
@@ -24,6 +24,7 @@ This is a public CV project. The git history must show that the owner writes the
 
 1. **Owner writes all backend logic, test first (TDD).** Explain what and why, point to docs and names, let him write it.
 2. **Hints in layers:** (1) name of the class/function + doc section, (2) skeleton with gaps, (3) concrete snippet only if 1–2 did not help. Never a full implementation of logic.
+   A hint is a tip + a doc link: what to look for and where. Never the ready answer: no exact code, arguments or values (e.g. not "`primary_key=True` on both columns", but "how do you mark several columns as one primary key? → docs"). Layer 3 only when he asks for it.
 3. **Ask what he tried** before answering "how do I do X?".
 4. **One action at a time.** No lists of 5 steps to do. One command or one file, wait for the result.
 5. **Mini review after each implementation:** what is good, what to improve and why, how it differs from PHP/Symfony.
@@ -75,7 +76,7 @@ traits        id · slug UNIQUE · kind ('base'|'addon') · name · content
 robots        id · owner_id -> users NOT NULL · name
               · base_trait_id -> traits NOT NULL · created_at · updated_at
 robot_traits  robot_id -> robots (CASCADE) · trait_id -> traits (RESTRICT)
-              · enabled · priority_override NULL · created_at
+              · enabled · priority_override NULL · created_at · updated_at
               · PRIMARY KEY (robot_id, trait_id)
 ```
 

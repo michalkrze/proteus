@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, MetaData, func
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, MetaData, func, true
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -51,6 +51,24 @@ class Robot(Base):
     owner_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"))
     base_trait_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("traits.id"))
 
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class RobotTrait(Base):
+    __tablename__ = "robot_traits"
+
+    robot_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("robots.id", ondelete="CASCADE"), primary_key=True
+    )
+    trait_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("traits.id", ondelete="RESTRICT"), primary_key=True
+    )
+
+    enabled: Mapped[bool] = mapped_column(server_default=true())
+    priority_override: Mapped[int | None]
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()

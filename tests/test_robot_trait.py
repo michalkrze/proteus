@@ -32,6 +32,7 @@ def test_same_trait_cannot_be_added_twice_to_robot(session: Session) -> None:
     session.flush()
 
     robot_trait_duplicate = RobotTrait(robot_id=robot.id, trait_id=trait_addon.id)
+    session.expunge(robot_trait)
     session.add(robot_trait_duplicate)
 
     with pytest.raises(IntegrityError, match="pk_robot_traits"):
