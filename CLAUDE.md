@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`. Next action: refactor test setup helpers into pytest fixtures, then Alembic.
+M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Next action: Alembic setup + first migration (owner writes).
 
 Update this line after every finished task.
 
