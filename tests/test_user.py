@@ -21,12 +21,8 @@ def test_database_generates_id_and_created_at(session: Session) -> None:
     assert user.created_at.tzinfo is not None
 
 
-def test_duplicate_email_is_rejected(session: Session) -> None:
-    first_user = User(email="test@example.com")
-    session.add(first_user)
-    session.flush()
-
-    duplicated_user = User(email="test@example.com")
+def test_duplicate_email_is_rejected(session: Session, user: User) -> None:
+    duplicated_user = User(email=user.email)
     session.add(duplicated_user)
 
     with pytest.raises(IntegrityError, match="uq_users_email"):
