@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Next action: Alembic setup + first migration (owner writes).
+M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Alembic + first migration applied; tests run migrations (not `create_all`); DB URL via pydantic-settings (`.env`). Next action: seed of the fictional patient split into traits.
 
 Update this line after every finished task.
 

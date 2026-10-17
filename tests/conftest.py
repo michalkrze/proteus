@@ -1,18 +1,25 @@
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
+from alembic.command import upgrade
+from alembic.config import Config
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session
 from testcontainers.community.postgres import PostgresContainer
 
-from proteus.models import Base, Robot, RobotTrait, Trait, User
+from proteus.models import Robot, RobotTrait, Trait, User
 
 
 @pytest.fixture(scope="session")
 def engine() -> Iterator[Engine]:
     with PostgresContainer(image="postgres:18", driver="psycopg") as postgres:
         engine = create_engine(postgres.get_connection_url())
-        Base.metadata.create_all(engine)
+        alembic_cfg = Config(
+            file_=Path(__file__).parent.parent / "alembic.ini",
+            attributes={"db_url": postgres.get_connection_url()},
+        )
+        upgrade(alembic_cfg, "head")
         yield engine
         engine.dispose()
 
