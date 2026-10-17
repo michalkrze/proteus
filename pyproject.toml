@@ -9,6 +9,7 @@ requires-python = ">=3.14"
 dependencies = [
     "alembic>=1.20.0",
     "psycopg[binary]>=3.3.6",
+    "pydantic-settings>=2.16.0",
     "sqlalchemy>=2.1.1",
 ]
 
@@ -26,6 +27,9 @@ dev = [
 
 [tool.ruff]
 line-length = 100
+# Only src/ holds our package. Without this, the local alembic/ folder makes ruff
+# treat the installed `alembic` library as first-party and mis-sort imports.
+src = ["src"]
 
 [tool.ruff.lint]
 select = [
