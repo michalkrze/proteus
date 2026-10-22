@@ -46,6 +46,8 @@ select = [
 [tool.mypy]
 strict = true
 files = ["src", "tests"]
+# Teaches mypy how pydantic builds __init__ (e.g. BaseSettings fields come from env, not args).
+plugins = ["pydantic.mypy"]
 
 [tool.pytest]
 testpaths = ["tests"]

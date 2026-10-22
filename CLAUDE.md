@@ -56,9 +56,10 @@ Policy: newest stable versions. Downgrade only on a proven library blocker.
 
 ## Architecture decisions
 
+- **Traits are robot-agnostic and tiny.** One idea per trait, no references to other traits or to one persona (e.g. "your partner", not "your girlfriend of three years"). Prefer many small traits over one big persona-specific trait; each must read well next to any other.
 - **Rules as data, checked in Python.** Traits provide tags; rules target tags (`requires` / `forbids`), never pairs of traits. At most one trait per dimension (hair, age, spoken language). The DB enforces only simple invariants (FK, unique, one per dimension). Rules arrive in M3.
 - **Two moments:** build time (may this trait be added? hard rules, HTTP 422 with a reason) and talk time (which valid traits go into the prompt? priority + token budget).
-- **Prompt is rebuilt every turn** by the `compose_prompt` node (plain Python, no LLM) from the current DB state. Deterministic order: priority desc, then id — keeps the prefix cacheable.
+- **Prompt is rebuilt every turn** by the `compose_prompt` node (plain Python, no LLM) from the current DB state. Deterministic order: priority asc (lower = more important), then id — keeps the prefix cacheable.
 - **Graph state** keeps `messages`, `system_prompt` and `active_trait_ids`. The system prompt is NOT appended to `messages`. The checkpoint history is our record of what the robot had in its prompt on each turn.
 - **Hidden content** (M5) is revealed only after a separate `unlock_check` node decides its condition is met. The current "everything in the prompt" approach stays as the eval baseline.
 - **Conversation** continues across sessions. `reset` creates a new thread; the old one stays archived.
@@ -83,7 +84,7 @@ robot_traits  robot_id -> robots (CASCADE) · trait_id -> traits (RESTRICT)
 - All IDs: UUIDv7 (`uuidv7()` in PG18). The API still checks ownership.
 - `kind`: text + CHECK constraint, not a native ENUM.
 - Timestamps: `timestamptz`. Constraint names via `MetaData(naming_convention=...)` from day one.
-- Effective priority: `COALESCE(robot_traits.priority_override, traits.priority)`; higher = more important.
+- Effective priority: `COALESCE(robot_traits.priority_override, traits.priority)`; lower = more important (1 = most important, cut last).
 - Python checks: `base_trait_id` points to a base trait; `robot_traits` rows point to add-ons.
 - Archived traits are hidden from the builder; robots that have them keep them.
 - Not in M1: parameters/JSONB, tags, dimensions, rules, modules, purchases.
