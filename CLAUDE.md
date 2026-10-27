@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Alembic + first migration applied; tests run migrations (not `create_all`); DB URL via pydantic-settings (`.env`). Seed done (`uv run python -m proteus.seed`: fictional patient, 9 tiny traits, blocks a second run; no test, temporary until M4 panel). Next action: `compose_prompt()` in TDD.
+M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Alembic + first migration applied; tests run migrations (not `create_all`); DB URL via pydantic-settings (`.env`). Seed done (`uv run python -m proteus.seed`: fictional patient, 9 tiny traits, blocks a second run; no test, temporary until M4 panel). `compose_robot_prompt(traits) -> str` done (pure function: base required, sorted by priority, joined with `\n`; 2 tests). Next action: DB loader for a robot's traits (enabled, `priority_override`), then tie-break by id; later: CHECK "priority 1 only for base, add-ons ≥ 2" (new migration).
 
 Update this line after every finished task.
 
