@@ -1,0 +1,2 @@
+class BaseTraitMissingError(Exception):
+    pass
