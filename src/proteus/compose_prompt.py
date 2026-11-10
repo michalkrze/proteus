@@ -1,17 +1,26 @@
+from dataclasses import dataclass
+from typing import Literal
+
 from proteus.exceptions import BaseTraitMissingError
-from proteus.models import Trait
 
 
-def _sort_traits(traits: list[Trait]) -> list[Trait]:
-    return sorted(traits, key=lambda trait: trait.priority)
+@dataclass(frozen=True)
+class ComposeRobotTraitFields:
+    kind: Literal["base", "addon"]
+    content: str
+    priority: int
 
 
-def compose_robot_prompt(traits: list[Trait]) -> str:
-    base_prompt_included = any(trait.kind == "base" for trait in traits)
+def _sort_traits(traits_fields: list[ComposeRobotTraitFields]) -> list[ComposeRobotTraitFields]:
+    return sorted(traits_fields, key=lambda trait_field: trait_field.priority)
+
+
+def compose_robot_prompt(traits_fields: list[ComposeRobotTraitFields]) -> str:
+    base_prompt_included = any(trait_field.kind == "base" for trait_field in traits_fields)
     if not base_prompt_included:
         raise BaseTraitMissingError("Base trait missing")
 
-    traits = _sort_traits(traits)
-    robot_prompt = "\n".join(trait.content for trait in traits)
+    traits_fields = _sort_traits(traits_fields)
+    robot_prompt = "\n".join(trait_field.content for trait_field in traits_fields)
 
     return robot_prompt
