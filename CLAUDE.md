@@ -2,7 +2,7 @@
 
 ## Status
 
-M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotTrait`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Alembic + first migration applied; tests run migrations (not `create_all`); DB URL via pydantic-settings (`.env`). Seed done (`uv run python -m proteus.seed`: fictional patient, 9 tiny traits, blocks a second run; no test, temporary until M4 panel). `compose_robot_prompt(traits) -> str` done (pure function: base required, sorted by priority, joined with `\n`; 2 tests). Next action: DB loader for a robot's traits (enabled, `priority_override`), then tie-break by id; later: CHECK "priority 1 only for base, add-ons ≥ 2" (new migration).
+M1 / all 4 models done (`User`, `Trait`, `Robot`, `RobotAddon`; 10 tests: DB defaults, unique, CHECK, FKs, CASCADE, RESTRICT, composite PK) + test infra (testcontainers PG18, rollback per test), `make check`, shared fixtures in `conftest.py`. Alembic + first migration applied; tests run migrations (not `create_all`); DB URL via pydantic-settings (`.env`). Seed done (`uv run python -m proteus.seed`: fictional patient, 9 tiny traits, blocks a second run; no test, temporary until M4 panel). `compose_robot_prompt(traits) -> str` done (pure function: base required, sorted by priority, joined with `\n`; 2 tests). Table renamed `robot_traits` -> `robot_addons` (migration 2, hand-written). Next action: DB loader for a robot's traits (enabled, `priority_override`), then tie-break by id; later: CHECK "priority 1 only for base, add-ons ≥ 2" (new migration).
 
 Update this line after every finished task.
 
@@ -76,7 +76,7 @@ traits        id · slug UNIQUE · kind ('base'|'addon') · name · content
               · priority INT · archived_at NULL · created_at · updated_at
 robots        id · owner_id -> users NOT NULL · name
               · base_trait_id -> traits NOT NULL · created_at · updated_at
-robot_traits  robot_id -> robots (CASCADE) · trait_id -> traits (RESTRICT)
+robot_addons  robot_id -> robots (CASCADE) · trait_id -> traits (RESTRICT)
               · enabled · priority_override NULL · created_at · updated_at
               · PRIMARY KEY (robot_id, trait_id)
 ```
@@ -84,8 +84,8 @@ robot_traits  robot_id -> robots (CASCADE) · trait_id -> traits (RESTRICT)
 - All IDs: UUIDv7 (`uuidv7()` in PG18). The API still checks ownership.
 - `kind`: text + CHECK constraint, not a native ENUM.
 - Timestamps: `timestamptz`. Constraint names via `MetaData(naming_convention=...)` from day one.
-- Effective priority: `COALESCE(robot_traits.priority_override, traits.priority)`; lower = more important (1 = most important, cut last).
-- Python checks: `base_trait_id` points to a base trait; `robot_traits` rows point to add-ons.
+- Effective priority: `COALESCE(robot_addons.priority_override, traits.priority)`; lower = more important (1 = most important, cut last).
+- Python checks: `base_trait_id` points to a base trait; `robot_addons` rows point to add-ons (the base is linked only via `robots.base_trait_id`).
 - Archived traits are hidden from the builder; robots that have them keep them.
 - Not in M1: parameters/JSONB, tags, dimensions, rules, modules, purchases.
 
@@ -126,7 +126,7 @@ Do not explain these concepts from scratch — explain how they look in Python a
 - Doctrine ORM / EntityManager -> SQLAlchemy ORM / `Session` (both Data Mapper, unit of work)
 - `#[ORM\Column]` -> `Mapped[int] = mapped_column()`
 - Doctrine Migrations -> Alembic (`revision --autogenerate`, `upgrade head`; chain via `down_revision`)
-- ManyToMany with extra columns -> association object (`RobotTrait`)
+- ManyToMany with extra columns -> association object (`RobotAddon`)
 - Symfony services + DI -> FastAPI `Depends()`
 - Serializer + Validator / DTO -> Pydantic models
 - Composer + `composer.lock` -> `uv` + `pyproject.toml` + `uv.lock`

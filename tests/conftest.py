@@ -8,7 +8,7 @@ from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session
 from testcontainers.community.postgres import PostgresContainer
 
-from proteus.models import Robot, RobotTrait, Trait, User
+from proteus.models import Robot, RobotAddon, Trait, User
 
 
 @pytest.fixture(scope="session")
@@ -83,9 +83,9 @@ def robot(session: Session, user: User, base_trait: Trait) -> Robot:
 
 
 @pytest.fixture
-def robot_trait(session: Session, robot: Robot, addon_trait: Trait) -> RobotTrait:
-    robot_trait = RobotTrait(robot_id=robot.id, trait_id=addon_trait.id)
-    session.add(robot_trait)
+def robot_addon(session: Session, robot: Robot, addon_trait: Trait) -> RobotAddon:
+    robot_addon = RobotAddon(robot_id=robot.id, trait_id=addon_trait.id)
+    session.add(robot_addon)
     session.flush()
 
-    return robot_trait
+    return robot_addon

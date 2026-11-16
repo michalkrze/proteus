@@ -3,7 +3,7 @@ import uuid
 from sqlalchemy import Engine, create_engine, select
 from sqlalchemy.orm import Session
 
-from proteus.models import Robot, RobotTrait, Trait, User
+from proteus.models import Robot, RobotAddon, Trait, User
 from proteus.settings import Settings
 
 
@@ -50,7 +50,7 @@ def run_one_time_seed(session: Session) -> None:
     session.flush()
 
     for addon_trait_id in addon_traits_ids:
-        session.add(RobotTrait(robot_id=robot.id, trait_id=addon_trait_id))
+        session.add(RobotAddon(robot_id=robot.id, trait_id=addon_trait_id))
 
 
 def patient_traits() -> list[Trait]:

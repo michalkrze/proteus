@@ -57,8 +57,8 @@ class Robot(Base):
     )
 
 
-class RobotTrait(Base):
-    __tablename__ = "robot_traits"
+class RobotAddon(Base):
+    __tablename__ = "robot_addons"
 
     robot_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("robots.id", ondelete="CASCADE"), primary_key=True
