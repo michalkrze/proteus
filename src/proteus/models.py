@@ -1,7 +1,8 @@
 import uuid
 from datetime import datetime
+from typing import Literal
 
-from sqlalchemy import CheckConstraint, DateTime, ForeignKey, MetaData, func, true
+from sqlalchemy import CheckConstraint, DateTime, ForeignKey, MetaData, String, func, true
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -34,7 +35,7 @@ class Trait(Base):
     name: Mapped[str]
     content: Mapped[str]
     priority: Mapped[int]
-    kind: Mapped[str]
+    kind: Mapped[Literal["base", "addon"]] = mapped_column(String)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     updated_at: Mapped[datetime] = mapped_column(
