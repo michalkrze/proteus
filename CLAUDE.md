@@ -39,6 +39,7 @@ This is a public CV project. The git history must show that the owner writes the
 - **Short and concrete. This is the most important rule.** Only what matters for the task and learning. No walls of text.
 - End replies with **English notes**: the top 3–4 corrections from his last message.
 - Technical terms and identifiers stay as they are.
+- **When a commit is due, suggest the commit message.** Conventional Commits: `type: imperative summary`, lowercase after the colon, no period, ≤ ~72 chars. Types: `test:` (red tests), `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`.
 
 ## Stack
 
