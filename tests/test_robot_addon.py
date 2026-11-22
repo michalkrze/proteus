@@ -44,5 +44,5 @@ def test_invalid_priority_override_is_rejected(
     robot_addon.priority_override = 1
 
     session.add(robot_addon)
-    with pytest.raises(IntegrityError, match="ck_robot_addon_priority_override"):
+    with pytest.raises(IntegrityError, match="ck_robot_addons_priority_override"):
         session.flush()
