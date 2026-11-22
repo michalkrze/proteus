@@ -24,7 +24,7 @@ def test_prompt_compose_structure_is_correct() -> None:
     assert robot_prompt == "\n".join([traits[1].content, traits[2].content, traits[0].content])
 
 
-def test_position_tie_break_is_handled() -> None:
+def test_equal_priority_sorted_by_id() -> None:
     first_uuid = uuid.uuid7()
     second_uuid = uuid.uuid7()
 

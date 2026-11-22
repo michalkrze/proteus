@@ -1,5 +1,6 @@
 import uuid
 from dataclasses import dataclass
+from operator import attrgetter
 from typing import Literal
 
 from proteus.exceptions import BaseTraitMissingError
@@ -14,7 +15,7 @@ class ComposeRobotTraitFields:
 
 
 def _sort_traits(traits_fields: list[ComposeRobotTraitFields]) -> list[ComposeRobotTraitFields]:
-    return sorted(traits_fields, key=lambda trait_field: trait_field.priority)
+    return sorted(traits_fields, key=attrgetter("priority", "id"))
 
 
 def compose_robot_prompt(traits_fields: list[ComposeRobotTraitFields]) -> str:
