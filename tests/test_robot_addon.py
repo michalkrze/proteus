@@ -37,11 +37,12 @@ def test_in_use_trait_cannot_be_deleted(
         session.flush()
 
 
+@pytest.mark.parametrize("priority_override_value", [0, 1, -2])
 def test_invalid_priority_override_is_rejected(
-    session: Session, robot: Robot, addon_trait: Trait
+    session: Session, robot: Robot, addon_trait: Trait, priority_override_value: int
 ) -> None:
     robot_addon = RobotAddon(robot_id=robot.id, trait_id=addon_trait.id)
-    robot_addon.priority_override = 0
+    robot_addon.priority_override = priority_override_value
 
     session.add(robot_addon)
     with pytest.raises(IntegrityError, match="ck_robot_addons_priority_override"):
