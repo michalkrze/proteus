@@ -41,7 +41,7 @@ def test_invalid_priority_override_is_rejected(
     session: Session, robot: Robot, addon_trait: Trait
 ) -> None:
     robot_addon = RobotAddon(robot_id=robot.id, trait_id=addon_trait.id)
-    robot_addon.priority_override = 1
+    robot_addon.priority_override = 0
 
     session.add(robot_addon)
     with pytest.raises(IntegrityError, match="ck_robot_addons_priority_override"):

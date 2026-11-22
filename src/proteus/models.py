@@ -28,7 +28,11 @@ class User(Base):
 
 class Trait(Base):
     __tablename__ = "traits"
-    __table_args__ = (CheckConstraint("kind IN ('base', 'addon')", name="kind"),)
+    __table_args__ = (
+        CheckConstraint("kind IN ('base', 'addon')", name="kind"),
+        CheckConstraint("kind <> 'addon' OR priority > 1", name="addon_priority"),
+        CheckConstraint("kind <> 'base' OR priority = 1", name="base_priority"),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, server_default=func.uuidv7())
     slug: Mapped[str] = mapped_column(unique=True)
@@ -60,6 +64,7 @@ class Robot(Base):
 
 class RobotAddon(Base):
     __tablename__ = "robot_addons"
+    __table_args__ = (CheckConstraint("priority_override > 1", name="priority_override"),)
 
     robot_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("robots.id", ondelete="CASCADE"), primary_key=True
