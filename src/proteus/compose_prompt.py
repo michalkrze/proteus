@@ -1,3 +1,4 @@
+import uuid
 from dataclasses import dataclass
 from typing import Literal
 
@@ -6,6 +7,7 @@ from proteus.exceptions import BaseTraitMissingError
 
 @dataclass(frozen=True)
 class ComposeRobotTraitFields:
+    id: uuid.UUID
     kind: Literal["base", "addon"]
     content: str
     priority: int

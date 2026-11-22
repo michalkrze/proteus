@@ -10,9 +10,10 @@ def test_prompt_trait_load_correct(
 ) -> None:
     expected_fields = {
         ComposeRobotTraitFields(
-            kind="base", content=base_trait.content, priority=base_trait.priority
+            id=base_trait.id, kind="base", content=base_trait.content, priority=base_trait.priority
         ),
         ComposeRobotTraitFields(
+            id=addon_trait.id,
             kind="addon",
             content=addon_trait.content,
             priority=addon_trait.priority,
@@ -30,9 +31,10 @@ def test_override_replaces_trait_priority(
 
     expected_fields = {
         ComposeRobotTraitFields(
-            kind="base", content=base_trait.content, priority=base_trait.priority
+            id=base_trait.id, kind="base", content=base_trait.content, priority=base_trait.priority
         ),
         ComposeRobotTraitFields(
+            id=addon_trait.id,
             kind="addon",
             content=addon_trait.content,
             priority=robot_addon.priority_override,
@@ -50,7 +52,7 @@ def test_disabled_addon_is_skipped(
 
     expected_fields = {
         ComposeRobotTraitFields(
-            kind="base", content=base_trait.content, priority=base_trait.priority
+            id=base_trait.id, kind="base", content=base_trait.content, priority=base_trait.priority
         ),
     }
 
